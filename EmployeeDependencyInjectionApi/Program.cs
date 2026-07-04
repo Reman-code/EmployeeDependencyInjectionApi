@@ -1,7 +1,23 @@
+using EmployeeDependencyInjectionApi.Data;
+using Microsoft.EntityFrameworkCore;
+using EmployeeDependencyInjectionApi.Data.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register DbContext
+builder.Services.AddDbContext<FinanceAppContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register application services
+builder.Services.AddScoped<IExpensesService, ExpensesService>();
+builder.Services.AddDbContext<FinanceAppContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
 var app = builder.Build();
 
